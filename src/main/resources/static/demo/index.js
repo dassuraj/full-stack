@@ -12,7 +12,7 @@ $(document).ready(function (){
 
         console.log("Serialized Value: ", value);  //
 
-         $.ajax({
+         /*$.ajax({
              url:'/person/save',
              method:'POST',
              contentType:'application/x-www-form-urlencoded',
@@ -24,7 +24,13 @@ $(document).ready(function (){
              error:function (xhr,success,error){
                  alert("error in saving data");
              }
-         })
+         })*/
+        $.post('/person/save',data,function (){
+            alert("successfully data is saved");
+            $("#demo")[0].reset();
+        }).fail(function (xhr,success,error){
+           alert("Error is saving data");
+        })
 
     })
 })
