@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Material Bootstrap Style Input Box</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Container for input */
+        .input-container {
+            position: relative;
+            margin: 10px;
+            width: 300px;
+        }
+
+        /* Input field */
+        .input-box {
+            width: 100%;
+            padding: 16px 8px 8px 8px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        /* Label inside the bar line */
+        .floating-label {
+            position: absolute;
+            top: 0;
+            left: 12px;
+            font-size: 16px;
+            color: #aaa;
+            background-color: #fff;
+            padding: 0 4px;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        /* Focus effect - label stays inside top line */
+        .input-box:focus + .floating-label,
+        .input-box:not(:placeholder-shown) + .floating-label {
+            color: #3f51b5;
+        }
+
+        /* Focus effect on input box */
+        .input-box:focus {
+            border-color: #3f51b5;
+            box-shadow: 0 0 5px rgba(63, 81, 181, 0.6);
+        }
+
+        /* Placeholder text */
+        .input-box::placeholder {
+            visibility: hidden; /* Hide placeholder, floating label acts as placeholder */
+        }
+    </style>
+</head>
+<body>
+<div class="input-container">
+    <input class="input-box" type="text" id="input" placeholder=" " required>
+    <label for="input" class="floating-label">Your Name</label>
+</div>
+</body>
+</html>

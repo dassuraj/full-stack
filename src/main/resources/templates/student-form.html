@@ -1,0 +1,477 @@
+<!--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration Form</title>
+    &lt;!&ndash; Bootstrap CSS &ndash;&gt;
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            margin-top: 50px;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 30px;
+            color: #007bff;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .btn-submit {
+            background-color: #007bff;
+            color: white;
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+        }
+
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+        }
+
+        .alert {
+            display: none;
+        }
+        table {
+            width: 100%;
+            margin-top: 30px;
+        }
+
+        th, td {
+            text-align: center;
+            padding: 10px;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-show-form {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-show-form:hover {
+            background-color: #218838;
+        }
+
+        .btn-hide-form {
+            background-color: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-hide-form:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 class="form-title">Student Registration</h2>
+    &lt;!&ndash; Button to show the form &ndash;&gt;
+    <button id="showFormButton" class="btn-show-form">Add New Student</button>
+
+    &lt;!&ndash; Button to hide the form (optional) &ndash;&gt;
+    <button id="hideFormButton" class="btn-hide-form" style="display: none;">Cancel</button>
+
+    &lt;!&ndash; Form &ndash;&gt;
+    <form id="registrationForm">
+        <div class="form-group mb-3">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter your name" required>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="rollNo">Roll Number</label>
+            <input type="text" class="form-control" id="rollNo" placeholder="Enter your roll number" required>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="phoneNumber">Phone Number</label>
+            <input type="tel" class="form-control" id="phoneNumber" placeholder="Enter your phone number" required>
+        </div>
+
+        <button type="submit" class="btn-submit">Submit</button>
+
+        <div class="alert alert-success mt-3" role="alert">
+            Form submitted successfully!
+        </div>
+    </form>
+    <h3 class="mt-5">Student Data</h3>
+    <table id="studentTable" border="1">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Roll Number</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+        </tr>
+        </thead>
+        <tbody>
+        &lt;!&ndash; Data will be dynamically inserted here &ndash;&gt;
+        </tbody>
+    </table>
+</div>
+
+&lt;!&ndash; Bootstrap JS and dependencies &ndash;&gt;
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+
+<script>
+    $(document).ready(function (){
+        $('#showFormButton').click(function() {
+            $('#registrationForm').show();  // Show the form
+            $('#showFormButton').hide();   // Hide the "Add New Student" button
+            $('#hideFormButton').show();   // Show the "Cancel" button to close the form
+        });
+        // Hide the form when the "Cancel" button is clicked
+        $('#hideFormButton').click(function() {
+            $('#registrationForm').hide(); // Hide the form
+            $('#showFormButton').show();   // Show the "Add New Student" button again
+            $('#hideFormButton').hide();   // Hide the "Cancel" button
+        });
+        populateStudentData();
+        $("#registrationForm").submit(function (event){
+            event.preventDefault();
+            var name = $('#name').val();
+            var rollNumber = $('#rollNo').val();
+            var email = $('#email').val();
+            var phoneNumber = $('#phoneNumber').val();
+            let data={
+                    name:name,
+                    rollNumber:rollNumber,
+                    email:email,
+                    phoneNumber:phoneNumber
+                };
+            $.ajax({
+                url:'/student/save',
+                method:'POST',
+                contentType:'application/json',
+                data:JSON.stringify(data),
+                success:function (response){
+                    console.log("successfully data is saved"+response);
+                    alert("successfully data is saved")
+                    populateStudentData()
+                },
+                error:function (xhr,status,error){
+                    console.log("Error submitting form"+error)
+                }
+            })
+        })
+    })
+
+    function populateStudentData(){
+        $.ajax({
+            url: '/student/find-all',  // Your API endpoint
+            type: 'POST',  // POST request to fetch data
+            success: function(response) {
+                $('#studentTable tbody').empty();  // Clear the existing table data
+                if (response && response.length > 0) {
+                    // Loop through each student and add a row to the table
+                    response.forEach(function(student) {
+                        $('#studentTable tbody').append(
+                            '<tr>' +
+                            '<td>' + student.name + '</td>' +
+                            '<td>' + student.rollNumber + '</td>' +
+                            '<td>' + student.email + '</td>' +
+                            '<td>' + student.phoneNumber + '</td>' +
+                            '</tr>'
+                        );
+                    });
+                } else {
+                    alert('No students found!');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching student data:', error);
+                alert('Error fetching data!');
+            }
+        });
+    }
+</script>
+</body>
+</html>
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration Form</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        body {
+            background-color: #f4f6f9;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            margin-top: 50px;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 30px;
+            color: #007bff;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .btn-submit {
+            background-color: #007bff;
+            color: white;
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+        }
+
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+        }
+
+        .alert {
+            display: none;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 30px;
+        }
+
+        th, td {
+            text-align: center;
+            padding: 10px;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-show-form {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-show-form:hover {
+            background-color: #218838;
+        }
+
+        .btn-hide-form {
+            background-color: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-hide-form:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 class="form-title">Student Registration</h2>
+    <!-- Button to show the form -->
+    <button id="showFormButton" class="btn-show-form">Add New Student</button>
+
+    <!-- Button to hide the form (optional) -->
+    <button id="hideFormButton" class="btn-hide-form" style="display: none;">Cancel</button>
+
+    <!-- Form -->
+    <form id="registrationForm">
+        <div class="form-group mb-3">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter your name" required>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="rollNo">Roll Number</label>
+            <input type="text" class="form-control" id="rollNo" placeholder="Enter your roll number" required>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="phoneNumber">Phone Number</label>
+            <input type="tel" class="form-control" id="phoneNumber" placeholder="Enter your phone number" required>
+        </div>
+
+        <button type="submit" class="btn-submit">Submit</button>
+
+        <div class="alert alert-success mt-3" role="alert">
+            Form submitted successfully!
+        </div>
+    </form>
+    <h3 class="mt-5">Student Data</h3>
+    <table id="studentTable" border="1">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Roll Number</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Data will be dynamically inserted here -->
+        </tbody>
+    </table>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#showFormButton').click(function () {
+            $('#registrationForm').show();  // Show the form
+            $('#showFormButton').hide();   // Hide the "Add New Student" button
+            $('#hideFormButton').show();   // Show the "Cancel" button to close the form
+        });
+
+        // Hide the form when the "Cancel" button is clicked
+        $('#hideFormButton').click(function () {
+            $('#registrationForm').hide(); // Hide the form
+            $('#showFormButton').show();   // Show the "Add New Student" button again
+            $('#hideFormButton').hide();   // Hide the "Cancel" button
+        });
+
+        // Submit the form
+        $("#registrationForm").submit(function (event) {
+            event.preventDefault();
+
+            var name = $('#name').val();
+            var rollNumber = $('#rollNo').val();
+            var email = $('#email').val();
+            var phoneNumber = $('#phoneNumber').val();
+
+            let data = {
+                name: name,
+                rollNumber: rollNumber,
+                email: email,
+                phoneNumber: phoneNumber
+            };
+
+            $.ajax({
+                url: '/student/save',  // Replace with your valid API endpoint
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    console.log("Data saved successfully:", response);
+                    alert("Successfully data is saved");
+                    populateStudentData();
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error submitting form:", error);
+                }
+            });
+        });
+
+        // Populate student data
+        function populateStudentData() {
+            $.ajax({
+                url: '/student/find-all',  // Replace with your valid API endpoint
+                type: 'POST',
+                success: function (response) {
+                    $('#studentTable tbody').empty();  // Clear the existing table data
+                    if (response && response.length > 0) {
+                        response.forEach(function (student) {
+                            $('#studentTable tbody').append(
+                                '<tr>' +
+                                '<td>' + student.name + '</td>' +
+                                '<td>' + student.rollNumber + '</td>' +
+                                '<td>' + student.email + '</td>' +
+                                '<td>' + student.phoneNumber + '</td>' +
+                                '</tr>'
+                            );
+                        });
+                    } else {
+                        alert('No students found!');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching student data:', error);
+                    alert('Error fetching data!');
+                }
+            });
+        }
+
+        // Populate data initially
+        populateStudentData();
+    });
+</script>
+
+</body>
+</html>

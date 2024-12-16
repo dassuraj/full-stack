@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>author page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+</head>
+<body>
+<form id="authorForm">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter Name" required>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="bio">Bio</label>
+            <input type="text" class="form-control" id="bio" placeholder="Enter Bio" required>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="birthdate">BirthDate</label>
+            <input type="date" class="form-control" id="birthdate" placeholder="Enter birthdate" required>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">save</button>
+</form>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!--script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>-->
+<script src="/author/author.js"></script>
+</body>
+</html>
